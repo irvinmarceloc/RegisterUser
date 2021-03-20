@@ -6,7 +6,10 @@ app = Flask(__name__)
 app.config['MONGO_URI']='mongodb://localhost/pythonreactdb'
 mongo = PyMongo(app)
 
+CORS(app)
+
 db = mongo.db.users
+
 #Metodo para crear el usuario
 @app.route('/users', methods=['POST'])
 def createUser():
@@ -47,7 +50,12 @@ def deleteUser(id):
 #Metodo para editar 
 @app.route('/users/<id>', methods=['PUT'])
 def updateUser(id):
-    return 'received'
+    db.update_one({'_id': ObjectId(id) } , {'$set':{
+        'name': request.json['name'],
+        'email': request.json['email'],
+        'password': request.json['password']
+    }})
+    return jsonify({'msg': 'user updated'})
 
 if __name__ == "__main__":
     app.run(debug=True)
