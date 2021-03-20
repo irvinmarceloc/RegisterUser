@@ -7,7 +7,7 @@ app.config['MONGO_URI']='mongodb://localhost/pythonreactdb'
 mongo = PyMongo(app)
 
 db = mongo.db.users
-
+#Metodo para crear el usuario
 @app.route('/users', methods=['POST'])
 def createUser():
     id = db.insert({
@@ -16,7 +16,7 @@ def createUser():
         'password':  request.json['password']
     })
     return jsonify(str(ObjectId(id)))
-
+#Metodo para listar usuarios
 @app.route('/users', methods=['GET'])
 def getUsers():
     users = []
@@ -28,13 +28,25 @@ def getUsers():
             'password':doc['password']
         })
     return jsonify(users)
-
+#Metodo para listar un usuario
 @app.route('/users/<id>', methods=['GET'])
-def deleteUser():
-    return 'received'
-
+def getUser(id):
+    user = db.find_one({'_id': ObjectId(id)})
+    print(user)
+    return jsonify({
+        '_id': str(ObjectId(user['_id'])),
+        'name': user['name'],
+        'email' : user['email'],
+        'password': user['password']
+    })
+#Metodo para eliminar 
+@app.route('/users/<id>', methods=['DELETE'])
+def deleteUser(id):
+    db.delete_one({'_id': ObjectId(id) })
+    return jsonify({'msg': 'User is delete'})
+#Metodo para editar 
 @app.route('/users/<id>', methods=['PUT'])
-def updateUser():
+def updateUser(id):
     return 'received'
 
 if __name__ == "__main__":
