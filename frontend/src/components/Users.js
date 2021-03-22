@@ -36,6 +36,18 @@ export const Users = () => {
         getUsers()
     }, [])
 
+    const deleteUser = async (id) => {
+        const res = await fetch('http://localhost:5000/users/${id}',{
+            method: 'DELETE'
+        });
+        const data = await res.json();
+        console.log(data)
+    }
+
+    const editUser = async (id) => {
+
+    }
+
     return (
         <div className="row">
             <div className="col-md-4">
@@ -77,8 +89,8 @@ export const Users = () => {
                     </button>
                 </form>
             </div>
-            <div className="col md-8">
-                <table>
+            <div className="col md-6">
+                <table className="table table-striped">
                     <thead>
                         <tr>
                             <th>Name</th>
@@ -89,10 +101,24 @@ export const Users = () => {
                     </thead>
                     <tbody>
                         {users.map(user => (
-                            <tr>
-                                <td>${user.name}</td>
-                                <td>${user.email}</td>
-                                <td>${user.password}</td>
+                            <tr key={user.id}>
+                                <td>{user.name}</td>
+                                <td>{user.email}</td>
+                                <td>{user.password}</td>
+                                <td>
+                                    <button 
+                                        className="btn btn-secondary btn-sm btn-block"
+                                        onClick= {() => editUser(user._id)}
+                                    >
+                                        Edit
+                                    </button>
+                                    <button 
+                                        className="btn btn-danger btn-sm btn-block"
+                                        onClick= {() => deleteUser(user._id)}
+                                    >
+                                        Delete
+                                    </button>
+                                </td>
                             </tr>
                         ))}
                     </tbody>
