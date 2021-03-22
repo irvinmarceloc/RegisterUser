@@ -10,6 +10,10 @@ CORS(app)
 
 db = mongo.db.users
 
+@app.route('/', methods=['GET'])
+def index():
+    return '<h1>Hola mundo</h1>'
+
 #Metodo para crear el usuario
 @app.route('/users', methods=['POST'])
 def createUser():
@@ -32,7 +36,7 @@ def getUsers():
         })
     return jsonify(users)
 #Metodo para listar un usuario
-@app.route('/users/<id>', methods=['GET'])
+@app.route('/user/<id>', methods=['GET'])
 def getUser(id):
     user = db.find_one({'_id': ObjectId(id)})
     print(user)

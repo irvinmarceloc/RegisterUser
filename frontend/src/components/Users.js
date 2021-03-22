@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 
 const API = process.env.REACT_APP_API
 
@@ -7,26 +7,34 @@ export const Users = () => {
     const [name, setName] =  useState('')
     const [email, setEmail] =  useState('')
     const [password, setPassword] =  useState('')
-    
+    const [users, setUsers] = useState([])
 
     const handleSubmit = async (e) => {   
         e.preventDefault();
-        const res = await fetch('${API}/users',{
+        const res = await fetch('http://localhost:5000/users',{
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(
-                {
+            body: JSON.stringify({
                     name,
                     email,
                     password
-                }
-            )
+            })
         })
         const data = await res.json()
         console.log(data)
     }
+
+    const getUsers = async () => {
+        const res =  await  fetch('http://localhost:5000/users');
+        const data = await res.json();
+        setUsers(data)
+    }
+
+    useEffect( () => {
+        getUsers()
+    }, [])
 
     return (
         <div className="row">
@@ -70,7 +78,25 @@ export const Users = () => {
                 </form>
             </div>
             <div className="col md-8">
-
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Password</th>
+                            <th>Operations</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {users.map(user => (
+                            <tr>
+                                <td>${user.name}</td>
+                                <td>${user.email}</td>
+                                <td>${user.password}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
             </div>
         </div>
     )   
