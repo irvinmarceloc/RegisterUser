@@ -24,6 +24,7 @@ export const Users = () => {
         })
         const data = await res.json()
         console.log(data)
+        await getUsers()
     }
 
     const getUsers = async () => {
@@ -37,16 +38,21 @@ export const Users = () => {
     }, [])
 
     const deleteUser = async (id) => {
-        const res = await fetch('http://localhost:5000/users/'+id,{
+        const userResponse = window.confirm('Seguro de eliminar usuario')
+        if(userResponse){
+            const res = await fetch('http://localhost:5000/users/'+id,{
             method: 'DELETE'
-        });
-        const data = await res.json();
-        console.log(data)
-        await getUsers()
+            });
+            const data = await res.json();
+            console.log(data)
+            await getUsers()
+        }
     }
 
     const editUser = async (id) => {
-        
+        const res = await fetch('http://localhost:5000/users/'+id)
+        const data = await res.json();
+        console.log(data)
     }
 
     return (
