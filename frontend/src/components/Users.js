@@ -37,15 +37,16 @@ export const Users = () => {
     }, [])
 
     const deleteUser = async (id) => {
-        const res = await fetch('http://localhost:5000/users/${id}',{
+        const res = await fetch('http://localhost:5000/users/'+id,{
             method: 'DELETE'
         });
         const data = await res.json();
         console.log(data)
+        await getUsers()
     }
 
     const editUser = async (id) => {
-
+        
     }
 
     return (
